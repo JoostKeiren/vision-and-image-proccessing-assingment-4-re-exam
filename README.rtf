@@ -1,0 +1,228 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2820
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 .SFNS-Bold;\f1\fnil\fcharset0 .SFNS-Regular;\f2\fnil\fcharset0 HelveticaNeue-Bold;
+\f3\fswiss\fcharset0 Helvetica;\f4\fmodern\fcharset0 Courier;\f5\fnil\fcharset0 .AppleSystemUIFontMonospaced-Regular;
+}
+{\colortbl;\red255\green255\blue255;\red14\green14\blue14;\red0\green0\blue0;\red151\green0\blue126;
+\red20\green0\blue196;}
+{\*\expandedcolortbl;;\cssrgb\c6700\c6700\c6700;\csgray\c0;\cssrgb\c66667\c5098\c56863;
+\cssrgb\c10980\c0\c81176;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww24060\viewh16200\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 README: Bag of Words (BoW) Image Retrieval with K-Means Clustering
+\f1\b0\fs32 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 \uc0\u55357 \u56524  Project Overview
+\f1\b0\fs32 \
+\
+This project implements a 
+\f2\b Content-Based Image Retrieval (CBIR) system
+\f1\b0  using the 
+\f2\b Bag of Words (BoW) model
+\f1\b0 . The system extracts 
+\f2\b SIFT descriptors
+\f1\b0  from images, clusters them using 
+\f2\b K-Means
+\f1\b0 , and represents each image as a 
+\f2\b BoW histogram
+\f1\b0 . It then retrieves similar images using various 
+\f2\b similarity measures
+\f1\b0  such as 
+\f2\b TF-IDF, Common Words, Bhattacharyya Distance, and KL Divergence
+\f1\b0 .
+\f3\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs38 \cf2 \uc0\u55357 \u56514  Project Structure
+\f3\b0\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf3 \uc0\u9500 \u9472 \u9472  Images/                  # Dataset of images organized in category folders\
+\uc0\u9500 \u9472 \u9472  A4.ipynb                 # Jupyter Notebook with all implementations\
+\uc0\u9500 \u9472 \u9472  bow_table_5cat.pkl       # Precomputed BoW histograms \cf4 for\cf3  \cf5 5\cf3  categories\
+\uc0\u9500 \u9472 \u9472  bow_table_20cat.pkl      # Precomputed BoW histograms \cf4 for\cf3  \cf5 20\cf3  categories\
+\uc0\u9500 \u9472 \u9472  README.md                # Project documentation (this file)\
+\
+
+\f3\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs38 \cf2 \uc0\u55357 \u56960  Features & Workflow
+\f1\b0\fs32 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 1\uc0\u65039 \u8419  Dataset Preparation
+\f1\b0\fs32 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Loads images from the 
+\f5 Images/
+\f1  directory.\
+	\'95	Selects either 
+\f2\b 5 categories
+\f1\b0  (for testing) or 
+\f2\b 20 categories
+\f1\b0  (for full evaluation).\
+	\'95	Splits images into 
+\f2\b training and test sets
+\f1\b0 .\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 2\uc0\u65039 \u8419  Feature Extraction using SIFT
+\f1\b0\fs32 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Detects and extracts 
+\f2\b SIFT descriptors
+\f1\b0  from each image.\
+	\'95	Descriptors are stored for clustering.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 3\uc0\u65039 \u8419  Clustering with K-Means
+\f1\b0\fs32 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Runs 
+\f2\b K-Means clustering
+\f1\b0  to create a 
+\f2\b visual codebook
+\f1\b0 .\
+	\'95	Evaluates different values of 
+\f2\b k (number of clusters)
+\f1\b0 .\
+	\'95	Uses 
+\f2\b Silhouette Score
+\f1\b0  and 
+\f2\b Sum of Squared Errors (SSE)
+\f1\b0  to determine the best 
+\f5 k
+\f1 .\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 4\uc0\u65039 \u8419  Creating Bag of Words Representation
+\f1\b0\fs32 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Assigns each descriptor to the closest cluster.\
+	\'95	Forms 
+\f2\b BoW histograms
+\f1\b0  for all images.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 5\uc0\u65039 \u8419  Image Retrieval
+\f1\b0\fs32 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Uses different 
+\f2\b similarity measures
+\f1\b0  to find the closest images:\
+\pard\tqr\tx500\tx660\li660\fi-660\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	
+\f2\b Common Words Similarity
+\f1\b0 \
+	\'95	
+\f2\b TF-IDF Weighted Similarity
+\f1\b0 \
+	\'95	
+\f2\b Bhattacharyya Distance
+\f1\b0 \
+	\'95	
+\f2\b KL Divergence
+\f1\b0 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Computes 
+\f2\b Mean Reciprocal Rank (MRR)
+\f1\b0  and 
+\f2\b Top-3 Accuracy
+\f1\b0 .\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 6\uc0\u65039 \u8419  Visualization
+\f1\b0\fs32 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	
+\f2\b Silhouette Score vs. k Plot
+\f1\b0  \uc0\u8594  Determines optimal 
+\f5 k
+\f1 .\
+	\'95	
+\f2\b SSE vs. k Plot
+\f1\b0  \uc0\u8594  Measures clustering compactness.\
+	\'95	
+\f2\b Cosine Similarity Matrix
+\f1\b0  \uc0\u8594  Shows relationships between cluster centroids.
+\f3\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs38 \cf2 \uc0\u55357 \u56522  Running the Project
+\f1\b0\fs32 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 1\uc0\u65039 \u8419  Setup Dependencies
+\f1\b0\fs32 \
+\
+Install the required libraries using:
+\f3\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf3 pip install numpy pandas opencv-python matplotlib seaborn scikit-learn
+\f3\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 2\uc0\u65039 \u8419  Run the Jupyter Notebook
+\f1\b0\fs32 \
+\
+Execute 
+\f5 A4.ipynb
+\f1  to process images and compute retrieval results.\
+\
+
+\f0\b\fs34 3\uc0\u65039 \u8419  Evaluate Retrieval Performance
+\f1\b0\fs32 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Run 
+\f5 perform_experiment()
+\f1  to get retrieval accuracy.\
+	\'95	Use 
+\f5 visualize_retrieval()
+\f1  to see retrieved images.
+\f3\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs38 \cf2 \uc0\u55357 \u56589  Example Outputs
+\f1\b0\fs32 \
+\
+\uc0\u9989  
+\f2\b Silhouette Score vs. k Plot
+\f1\b0 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Helps determine the best number of clusters for K-Means.\
+\
+\uc0\u9989  
+\f2\b SSE vs. k Plot
+\f1\b0 \
+	\'95	Shows how clustering error decreases with more clusters.\
+\
+\uc0\u9989  
+\f2\b Retrieved Images
+\f1\b0 \
+	\'95	Displays query images with the most similar images retrieved.
+\f3\fs24 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f1\fs32 \cf2 \
+\
+Developed as part of an 
+\f2\b Image Retrieval & Machine Learning
+\f1\b0  project. \uc0\u55357 \u56960 }
